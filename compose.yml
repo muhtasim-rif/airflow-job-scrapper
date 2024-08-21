@@ -1,0 +1,9 @@
+services: 
+    airflow:
+      build:
+        context: ./
+      volumes:
+        - ./airflow:/opt/airflow
+      ports:
+        - "8000:8080"
+      command: airflow standalone

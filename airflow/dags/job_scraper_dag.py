@@ -1,0 +1,39 @@
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.utils.dates import days_ago
+from scripts.scraper import scrape_linkedIn
+from scripts.s3_manager import upload_to_s3
+from datetime import datetime, timedelta
+import pytz
+
+timezone = pytz.timezone('Asia/Dhaka')
+
+default_args={
+    'owner': 'airflow',
+    'start_date': days_ago(1),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+    'timezone': timezone,
+
+}
+
+dag = DAG(
+    'job_scraper',
+    default_args=default_args,
+    description='A DAG to fetch job listings from LinkedIn and upload to S3',
+    schedule_interval='0 20 * * *',
+    
+)
+
+def run_scraper_and_upload():
+    jobs = scrape_linkedIn()
+    if jobs: 
+        file_name = f'jobs_{datetime.now(timezone).strftime("%Y%m%d_%H%M%S")}.json'
+        upload_to_s3(jobs, file_name)
+
+scrape_and_upload = PythonOperator(
+    task_id='scrape_and_upload',
+    python_callable=run_scraper_and_upload,
+    dag=dag,
+)
+
