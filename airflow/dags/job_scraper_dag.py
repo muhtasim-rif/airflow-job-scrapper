@@ -2,9 +2,10 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 from scripts.scraper import scrape_linkedIn
-from scripts.s3_manager import upload_to_s3
+from scripts.git_manager import upload_to_git
 from datetime import datetime, timedelta
 import pytz
+#from scripts.s3_manager import upload_to_s3
 
 timezone = pytz.timezone('Asia/Dhaka')
 
@@ -29,7 +30,7 @@ def run_scraper_and_upload():
     jobs = scrape_linkedIn()
     if jobs: 
         file_name = f'jobs_{datetime.now(timezone).strftime("%Y%m%d_%H%M%S")}.json'
-        upload_to_s3(jobs, file_name)
+        upload_to_git(jobs, file_name)
 
 scrape_and_upload = PythonOperator(
     task_id='scrape_and_upload',

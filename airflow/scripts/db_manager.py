@@ -15,10 +15,11 @@ class JobListing(Base):
     company = Column(String)
     location = Column(String)
     link = Column(String)
-    posted_datea = Column(DateTime, default=datetime.now(timezone))
+    posted_date = Column(DateTime(Timezone=True), default=datetime.now(timezone))
 
 def get_session():
-    engine = create_engine('sqlite:///jobs.db')
+    DATABASE_URL = 'postgresql+psycopg2://postgres:admin@localhost/postgres'
+    engine = create_engine(DATABASE_URL)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     return Session()

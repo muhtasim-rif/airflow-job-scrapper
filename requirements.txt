@@ -1,4 +1,7 @@
 requests
-boto3
+#boto3
 apache-airflow
 pytz
+psycopg2-binary
+SQLAlchemy
+gitpython
