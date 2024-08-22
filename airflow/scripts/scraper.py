@@ -1,53 +1,51 @@
-import requests
+import os
+import serpapi
 from datetime import datetime
 import pytz
 
 timezone = pytz.timezone('Asia/Dhaka')
 
 
-ACCESS_TOKEN = 'access_token'
-BASE_URL = 'https://api.linkedin.com/v2'
+SERPAPI_API_KEY = '65a170ad84895c39a99003aa0f033fe7def1f0c7'
+
+if not SERPAPI_API_KEY:
+    raise ValueError("No SERPAPI_API_KEY found in environment variables. Please set it before running the script.")
 
 
-def get_header():
-    return {
-        'Authorization': f'Bearer {ACCESS_TOKEN}',
-        'Content-Type': 'application/json',
-        'X-Restli-Protocol-Version': '2.0.0'
+def fetch_jobs_from_serpapi():
 
-    }
+    client = serpapi.Client(api_key=SERPAPI_API_KEY)
 
-
-def fetch_job():
-    url = f'{BASE_URL}/jobs'
-    headers = get_header()
     params = {
-        'keywords': 'data engineer',
-        'location': 'Dhaka',
-        'count': 25
+        "engine": "google_jobs",
+        "q": "data engineer",
+        "location": "Dhaka",
+        
     }
 
-    response = requests.get(url, headers=headers, params=params)
+    results = client.search(params)
 
-    if response.status_code == 200:
-        return response.json()
+    if 'jobs' in results:
+        return results['jobs']
     else:
-        print(f'Error fetching data: {response.status_code}')
+        print(f"Error fetching data from SerpApi: {results.get('error', 'Unknown error')}")
         return None
+
     
-def scrape_linkedIn():
-    job_data = fetch_job()
+def scrape_jobs():
+    job_data = fetch_jobs_from_serpapi()
     jobs = []
+
     if job_data:
-        for job in job_data.get('elements', []):
+        for job in job_data:
             title = job.get('title', 'N/A')
-            company = job.get('companyName', 'N/A')
+            company = job.get('company_name', 'N/A')
             location = job.get('location', 'N/A')
             link = job.get('url', 'N/A')
-            posted_date_str = job.get('datePosted', '')
+            posted_date_str = job.get('date_posted', '')
 
             try:
-                posted_date = datetime.strptime(posted_date_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+                posted_date = datetime.strptime(posted_date_str, '%Y-%m-%d')
                 posted_date = posted_date.astimezone(timezone)
 
             except ValueError:
