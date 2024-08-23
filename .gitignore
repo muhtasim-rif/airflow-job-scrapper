@@ -1,0 +1,6 @@
+logs/
+postgres_data/
+
+compose.override.yml
+
+__pycache__

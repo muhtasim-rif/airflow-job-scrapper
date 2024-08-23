@@ -30,7 +30,7 @@ def run_scraper_and_upload():
     jobs = scrape_jobs()
     if jobs: 
         file_name = f'jobs_{datetime.now(timezone).strftime("%Y%m%d_%H%M%S")}.json'
-        upload_to_git(jobs, file_name)
+        upload_to_git(jobs)
 
 scrape_and_upload = PythonOperator(
     task_id='scrape_and_upload',
