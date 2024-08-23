@@ -1,3 +1,4 @@
+import json
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
@@ -29,8 +30,11 @@ dag = DAG(
 def run_scraper_and_upload():
     jobs = scrape_jobs()
     if jobs: 
-        file_name = f'jobs_{datetime.now(timezone).strftime("%Y%m%d_%H%M%S")}.json'
-        upload_to_git(jobs)
+        file_name = f'files/jobs_{datetime.now(timezone).strftime("%Y%m%d_%H%M%S")}.json'
+        with open(file_name, 'w') as f:
+            json.dump(jobs, f, indent=4)
+
+        upload_to_git(file_name)
 
 scrape_and_upload = PythonOperator(
     task_id='scrape_and_upload',
