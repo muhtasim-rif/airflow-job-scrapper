@@ -5,4 +5,4 @@ psycopg2-binary
 SQLAlchemy
 gitpython
 serpapi
-#boto3
+boto3

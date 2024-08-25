@@ -3,10 +3,10 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 from scripts.scraper import scrape_jobs
-from scripts.git_manager import upload_to_git
+from scripts.s3_manager import upload_to_s3
 from datetime import datetime, timedelta
 import pytz
-#from scripts.s3_manager import upload_to_s3
+
 
 timezone = pytz.timezone('Asia/Dhaka')
 
@@ -34,7 +34,7 @@ def run_scraper_and_upload():
         with open(file_name, 'w') as f:
             json.dump(jobs, f, indent=4)
 
-        upload_to_git(file_name)
+        upload_to_s3(file_name)
 
 scrape_and_upload = PythonOperator(
     task_id='scrape_and_upload',

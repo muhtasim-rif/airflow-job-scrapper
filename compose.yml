@@ -1,16 +1,4 @@
 services:
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
-
-
   airflow:
     build:
       context: ./
@@ -23,3 +11,33 @@ services:
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:admin@postgres/postgres
     depends_on:
       - postgres
+      - minio
+  
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+
+  minio:
+    image: quay.io/minio/minio:latest
+    ports: 
+      - "9000:9000"
+      - "9001:9001"
+    volumes: 
+      - ./minio/data:/data 
+    environment:
+        MINIO_ROOT_USER: miniouser
+        MINIO_ROOT_PASSWORD: miniopass
+    command: 
+      - "server" 
+      - "/data" 
+      - "--console-address" 
+      - ":9001"
+      

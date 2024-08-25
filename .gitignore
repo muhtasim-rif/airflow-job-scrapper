@@ -1,5 +1,6 @@
 logs/
 postgres_data/
+minio/
 
 compose.override.yml
 
