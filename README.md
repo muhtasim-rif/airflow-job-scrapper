@@ -1,8 +1,8 @@
-# Job Scraper DAG
+# Airflow Job Scraper: Google Jobs to PostgreSQL & S3 with Docker
 
 This project is an automated job scraper that collects job listings from Google Jobs using SerpApi, stores them in a PostgreSQL database, and uploads the job data to an S3-compatible storage service. The project is orchestrated using Apache Airflow and is designed to run in a Dockerized environment.
 
-# Project Structure
+## Project Structure
 
 - **`job_scraper_dag.py`**: Defines the Airflow DAG that runs the job scraper and uploads the results to S3.
 - **`db_initiate.py`**: Script to initialize the PostgreSQL database and create necessary tables.
@@ -13,15 +13,15 @@ This project is an automated job scraper that collects job listings from Google 
 - **`dockerfile`**: Dockerfile to build the custom Airflow image with required dependencies.
 - **`requirements.txt`**: Python dependencies required for the project.
 
-# Setup Instructions
+## Setup Instructions
 
-# Prerequisites
+### Prerequisites
 
 - Docker and Docker Compose installed on your machine.
 - A SerpApi account with an API key.
 - AWS S3 or S3-compatible storage service credentials (e.g., MinIO).
 
-# Steps to Run the Project
+## Steps to Run the Project
 
 1. **Clone the Repository**
 
@@ -36,7 +36,7 @@ This project is an automated job scraper that collects job listings from Google 
 
     ```bash
     docker-compose up --build
-    
+    ```
     This command will build the Docker images and start the Airflow, PostgreSQL, and MinIO services.
 
 4. **Initialize the Database**
@@ -55,27 +55,28 @@ This project is an automated job scraper that collects job listings from Google 
     In the Airflow UI, find the job_scraper DAG and trigger it manually. The DAG is also scheduled to run daily at 8:00 PM (Asia/Dhaka time).
 
 
-# Customization
+    ## Customization
 
-    Job Query: Modify the job query parameters in scraper.py if you want to scrape jobs for different roles or locations.
 
-    Database Management: Customize the logic in db_manager.py to manage how job listings are updated or removed.
+    -   Job Query: Modify the job query parameters in scraper.py if you want to scrape jobs for different roles or locations.
 
-# Troubleshooting
+    -   Database Management: Customize the logic in db_manager.py to manage how job listings are updated or removed.
 
-    Database Connection Issues: Ensure that the AIRFLOW__CORE__SQL_ALCHEMY_CONN environment variable is correctly set in the compose.override.yml file.
+    ## Troubleshooting
 
-    MinIO Setup: Verify that the MinIO service is correctly configured and running. You can access the MinIO console at http://localhost:9000.
+    -   Database Connection Issues: Ensure that the AIRFLOW__CORE__SQL_ALCHEMY_CONN environment variable is correctly set in the compose.override.yml file.
 
-# License
+    -   MinIO Setup: Verify that the MinIO service is correctly configured and running. You can access the MinIO console at http://localhost:9000.
+
+    ## License
 
     This project is licensed under the MIT License. See the LICENSE file for more information.
 
-# Contributing
+    ## Contributing
     
     Contributions are welcome!
 
-# Contact 
-
+    ## Contact
+ 
     For any questions or issues, please contact muhtasim.riffat@gmail.com.
 
