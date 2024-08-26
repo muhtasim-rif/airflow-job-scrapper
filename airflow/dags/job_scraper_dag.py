@@ -22,7 +22,7 @@ default_args={
 dag = DAG(
     'job_scraper',
     default_args=default_args,
-    description='A DAG to fetch job listings from SerpApi and upload to Git',
+    description='A DAG to fetch job listings from Google Jobs using SerpApi and uploads to MinIO',
     schedule_interval='0 20 * * *',
     
 )
