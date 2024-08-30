@@ -26,11 +26,17 @@ This project is an automated job scraper that collects job listings from Google 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/muhtasim-rif/portfolio.git.
+   git clone https://github.com/muhtasim-rif/airflow-job-scrapper.git.
    
 2. **Configure Environment Variables**
 
-    Update the compose.override.yml file with your SerpApi key, S3 bucket name, and S3 credentials.
+    Configure the following environemnt variables in either `compose.yml` or `compose.override.yml` file. 
+    
+    ```yml
+      - S3_BUCKET=<secret>
+      - S3_ACCESS_KEY=<secret>
+      - S3_SECRET_KEY=<secret>
+    ```
 
 3. **Build and Start the Services**
 
