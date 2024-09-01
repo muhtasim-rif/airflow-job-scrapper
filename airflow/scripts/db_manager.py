@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
 import pytz
 
-timezone = pytz.time('Asia/Dhaka')
+timezone = pytz.timezone('Asia/Dhaka')
 
 Base = declarative_base()
 
@@ -15,7 +15,7 @@ class JobListing(Base):
     company = Column(String)
     location = Column(String)
     link = Column(String)
-    posted_date = Column(DateTime(Timezone=True), default=datetime.now(timezone))
+    posted_date = Column(DateTime(Timezone=True), default=lambda: datetime.now(timezone))
 
 def get_session():
     DATABASE_URL = 'postgresql+psycopg2://postgres:admin@localhost/postgres'
@@ -53,7 +53,6 @@ def update_job_listings(jobs):
     def remove_old_listings():
         session = get_session()
         one_month_ago = datetime.now(timezone) - timedelta(days=30)
-        old_jobs = session.query(JobListing).filter(JobListing.posted_date < one_month_ago).all()
-        for job in old_jobs:
-            session.delete(job)
+        session.query(JobListing).filter(JobListing.posted_date < one_month_ago).delete(synchronize_session=False)
+        
         session.commit()
